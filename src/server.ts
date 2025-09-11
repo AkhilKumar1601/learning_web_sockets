@@ -15,6 +15,7 @@ server.on("connection",(socket : WebSocket) => {
     } else if ( data instanceof Buffer) {
        console.log(`Received binary data`, data);
        console.log(`Received binary data of length`, data.length);
+       socket.send(`Received binary data of length ${data.length}`);
     }  
   })
 
