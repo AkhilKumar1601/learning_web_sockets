@@ -13,6 +13,7 @@ wss.on("connection",(ws : WebSocket) => {
 
    ws.on("message",(message : WebSocket.RawData) => {
     console.log(message);
+    ws.send(message);
     counter += 1;
     ws.send(`You have sent ${counter} messages so far.`)
    })

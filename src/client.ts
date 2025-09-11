@@ -1,22 +1,21 @@
-import WebSocket, { WebSocketServer } from "ws";
-const socket = new WebSocket("ws://localhost:8080");
+import WebSocket from "ws";
 
-socket.on("open", () => {
-  console.log("You are now connected with server");
+// Connect to the server
+const ws = new WebSocket("ws://localhost:8080");
 
-  const arr = new Uint8Array([1,3,6]);
-  socket.send(arr);
-  console.log("Send the binary data to server", arr.length);
-})
+ws.on("open", () => {
+  console.log("✅ Connected to server");
+  ws.send("Hello from the Node client!");
+});
 
-socket.on("message",(data) => {
- if (typeof data === "string") {
-  console.log("Data is of string that is sent by the server:",data)
- } else if (data instanceof Buffer) {
-  console.log("Server sent the binary :", data)
- }
-})
+ws.on("message", (message) => {
+  console.log("📩 Message from server:", message.toString());
+});
 
-socket.on("close",() => {
-  console.log("Disconnected from server");
-})
+ws.on("close", () => {
+  console.log("❌ Disconnected from server");
+});
+
+ws.on("error", (err) => {
+  console.error("⚠️ WebSocket error:", err);
+});
