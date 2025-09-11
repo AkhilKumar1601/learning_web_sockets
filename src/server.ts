@@ -1,21 +1,25 @@
 import WebSocket, { WebSocketServer } from "ws";
 
-const server = new WebSocketServer( { port : 8080 });
-
-console.log("WebSocket server running on ws://localhost:8080");
+const server = new WebSocketServer( { port : 8080 } );
+console.log("You are now connected with the Web Connected Server :- 8080");
 
 server.on("connection",(socket : WebSocket) => {
+  console.log("You are connected with Client");
+  
+  const buf = Buffer.from([1,3,5]);
+  socket.send(buf);
 
-  console.log("New Client connected")
-
-  const time = new Date().toLocaleString();
-  socket.send(`Welcome Current server time : ${time}`);
-
-  socket.on("message",(message : string) => {
-    console.log(message);
-  });
-
-  socket.on("close", () => {
-    console.log("Client Disconnected");``
+  socket.on("message",(data) => {
+    if ( typeof data === "string") {
+       console.log(`Received data from the client is of type :- string`, data);
+    } else if ( data instanceof Buffer) {
+       console.log(`Received binary data`, data);
+       console.log(`Received binary data of length`, data.length);
+    }  
   })
+
+    socket.on("close",() => {
+      console.log("Client disconnected");
+    })
+  
 })
